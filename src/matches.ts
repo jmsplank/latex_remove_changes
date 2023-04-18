@@ -14,7 +14,7 @@ function getRegexMatches(test_str: string, expr: RegExp, dummy_new: string | und
         }
         let res: Match = {
             change: match[1],
-            new: dummy_new ? dummy_new : match[2]
+            new: typeof dummy_new === 'string' ? dummy_new : match[2]
         }
         matches.push(res)
     }
@@ -40,11 +40,16 @@ function matchChanges(test_str: string): Match[] {
     return matches;
 }
 
+function replaceDoubleSpaces(test_str: string): string {
+    return test_str.replace(/  /g, " ");
+}
+
 function applyChanges(test_str: string, matches: Match[]): string {
     let res = test_str;
     matches.forEach((match) => {
         res = replaceMatch(res, match);
     });
+    res = replaceDoubleSpaces(res);
     return res;
 
 }
